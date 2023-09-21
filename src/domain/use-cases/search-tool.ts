@@ -1,5 +1,5 @@
 import { UseCase } from "@domain/common";
-import { Tool } from "@domain/entities";
+import { ToolProps } from "@domain/entities";
 
 export namespace SearchTool {
   export type Params = Partial<{
@@ -7,7 +7,7 @@ export namespace SearchTool {
     title: string;
   }>;
 
-  export type Result = Tool[];
+  export type Result = ToolProps[];
 }
 
 export interface SearchTool extends UseCase<SearchTool.Params, SearchTool.Result> {

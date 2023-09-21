@@ -1,4 +1,4 @@
-export type Tool = {
+export type ToolProps = {
   id: number;
   name: string;
   description: string;
@@ -7,3 +7,7 @@ export type Tool = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export class Tool {
+  constructor(readonly props: ToolProps) {}
+}

@@ -1,12 +1,12 @@
 import { UseCase } from "@domain/common";
-import { Tool } from "@domain/entities";
+import { ToolProps } from "@domain/entities";
 
 export namespace GetTool {
   export type Params = {
     id: string;
   };
 
-  export type Result = Tool;
+  export type Result = ToolProps;
 }
 
 export interface GetTool extends UseCase<GetTool.Params, GetTool.Result> {

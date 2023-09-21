@@ -1,5 +1,5 @@
 import { UseCase } from "@domain/common";
-import { Tool } from "@domain/entities";
+import { ToolProps } from "@domain/entities";
 
 export namespace AddTool {
   export type Params = {
@@ -9,7 +9,7 @@ export namespace AddTool {
     tags: string[];
   };
 
-  export type Result = Tool;
+  export type Result = ToolProps;
 }
 
 export interface AddTool extends UseCase<AddTool.Params, AddTool.Result> {
