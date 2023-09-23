@@ -1,13 +1,29 @@
+import { randomUUID } from "crypto";
+
 export type ToolProps = {
-  id: number;
   name: string;
   description: string;
   link: string;
   tags: string[];
-  createdAt: Date;
-  updatedAt: Date;
 };
 
 export class Tool {
-  constructor(readonly props: ToolProps) {}
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
+
+  constructor(
+    readonly props: ToolProps,
+    readonly id: string,
+    createdAt?: Date,
+    updatedAt?: Date,
+  ) {
+    this.id = randomUUID().split("-")[0].toUpperCase() ?? id;
+    this.createdAt = new Date() ?? createdAt;
+    this.updatedAt = new Date() ?? updatedAt;
+  }
+
+  static restore(props: ToolProps, id: string, createdAt: Date, updatedAt: Date) {
+    const tool = new Tool(props, id, createdAt, updatedAt);
+    return tool;
+  }
 }
