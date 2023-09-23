@@ -20,6 +20,8 @@ export class Tool {
     this.id = randomUUID().split("-")[0].toUpperCase() ?? id;
     this.createdAt = new Date() ?? createdAt;
     this.updatedAt = new Date() ?? updatedAt;
+
+    this.props.tags = this.props.tags.map((tag) => tag.toLowerCase());
   }
 
   static restore(props: ToolProps, id: string, createdAt: Date, updatedAt: Date) {
