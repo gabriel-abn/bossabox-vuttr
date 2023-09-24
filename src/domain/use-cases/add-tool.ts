@@ -9,7 +9,7 @@ export namespace AddTool {
     tags: string[];
   };
 
-  export type Result = ToolProps;
+  export type Result = ToolProps & { id: string };
 }
 
 export interface AddTool extends UseCase<AddTool.Params, AddTool.Result> {
