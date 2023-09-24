@@ -19,7 +19,7 @@ const makeSut = () => {
   return { sut, repository };
 };
 
-describe("Add Tool", () => {
+describe("Use case: Add Tool", () => {
   afterEach(() => {
     const { repository } = makeSut();
 
