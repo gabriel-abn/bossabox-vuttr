@@ -1,6 +1,5 @@
 import { Tool, ToolProps } from "@domain/entities";
 import { faker } from "@faker-js/faker";
-import { afterEach, describe, expect, it } from "vitest";
 import { AddToolUseCase } from "../add-tool-use-case";
 import { AddToolRepositoryInMemory } from "./mocks/add-tool-repository-in-memory";
 
@@ -78,30 +77,27 @@ describe("Add Tool", () => {
     expect(repository.tags.get("tag2")).toBeTruthy();
   });
 
-  it("should concatenate ids of tools with same tag", () => {
+  it("should concatenate ids of tools with same tag", async () => {
     const { sut, repository } = makeSut();
+    const res = [];
 
-    Promise.all([
-      sut.execute({
-        title: "any_title_1",
-        link: "any_link_1.com",
-        description: "any_description",
-        tags: ["tag1"],
-      }),
-      sut.execute({
-        title: "any_title_2",
-        link: "any_link_2.com",
-        description: "any_description",
-        tags: ["tag1"],
-      }),
-      sut.execute({
-        title: "any_title_3",
-        link: "any_link_3.com",
-        description: "any_description",
-        tags: ["tag1"],
-      }),
-    ]);
+    [
+      ["any_title_1", "any_link_1.com"],
+      ["any_title_2", "any_link_2.com"],
+      ["any_title_3", "any_link_3.com"],
+    ].forEach(([title, link]) => {
+      res.push(
+        sut.execute({
+          title,
+          link,
+          description: "any_description",
+          tags: ["tag1"],
+        }),
+      );
+    });
 
-    expect(repository.tags.get("tag1").split(";").length).toBe(3);
+    Promise.all(res).then(() => {
+      expect(repository.tags.get("tag1").split(";").length).toBe(3);
+    });
   });
 });
