@@ -29,6 +29,10 @@ export class Tool {
   }
 
   static create(props: ToolProps) {
+    if (props.tags.length === 0) {
+      throw new Error("NO_TAGS");
+    }
+
     const id = randomUUID().split("-")[0].toUpperCase();
     const tool = new Tool(props, id);
     return tool;
