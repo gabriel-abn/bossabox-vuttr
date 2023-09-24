@@ -11,13 +11,12 @@ export class Tool {
   readonly createdAt: Date;
   readonly updatedAt: Date;
 
-  constructor(
+  private constructor(
     readonly props: ToolProps,
     readonly id: string,
     createdAt?: Date,
     updatedAt?: Date,
   ) {
-    this.id = randomUUID().split("-")[0].toUpperCase() ?? id;
     this.createdAt = new Date() ?? createdAt;
     this.updatedAt = new Date() ?? updatedAt;
 
@@ -26,6 +25,12 @@ export class Tool {
 
   static restore(props: ToolProps, id: string, createdAt: Date, updatedAt: Date) {
     const tool = new Tool(props, id, createdAt, updatedAt);
+    return tool;
+  }
+
+  static create(props: ToolProps) {
+    const id = randomUUID().split("-")[0].toUpperCase();
+    const tool = new Tool(props, id);
     return tool;
   }
 }
