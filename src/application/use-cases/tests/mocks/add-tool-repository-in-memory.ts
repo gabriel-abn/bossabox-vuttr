@@ -5,16 +5,20 @@ export class AddToolRepositoryInMemory implements AddToolRepository {
   tools: Array<Tool> = [];
   tags: Map<string, string> = new Map();
 
-  async add(params: AddToolRepository.Params): Promise<AddToolRepository.Result> {
-    this.tools.map((tool) => {
-      if (
-        tool.props.title.toLowerCase() === params.props.title.toLowerCase() &&
-        tool.props.link.toLowerCase() === params.props.link.toLowerCase()
-      ) {
-        throw new Error("Tool already exists");
-      }
-    });
+  async checkByTitleAndLink(title: string, link: string): Promise<boolean> {
+    const tool = this.tools.find(
+      (tool) =>
+        tool.props.title.toLowerCase() === title.toLowerCase() && tool.props.link.toLowerCase() === link.toLowerCase(),
+    );
 
+    if (tool) {
+      return true;
+    }
+
+    return false;
+  }
+
+  async add(params: AddToolRepository.Params): Promise<AddToolRepository.Result> {
     this.tools.push(params);
 
     params.props.tags.map((tag) => {
