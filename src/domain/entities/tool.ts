@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 
 export type ToolProps = {
-  name: string;
+  title: string;
   description: string;
   link: string;
   tags: string[];

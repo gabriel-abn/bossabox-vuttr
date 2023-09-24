@@ -8,7 +8,7 @@ export class AddToolRepositoryInMemory implements AddToolRepository {
   async add(params: AddToolRepository.Params): Promise<AddToolRepository.Result> {
     this.tools.map((tool) => {
       if (
-        tool.props.name.toLowerCase() === params.props.name.toLowerCase() &&
+        tool.props.title.toLowerCase() === params.props.title.toLowerCase() &&
         tool.props.link.toLowerCase() === params.props.link.toLowerCase()
       ) {
         throw new Error("Tool already exists");
@@ -30,7 +30,7 @@ export class AddToolRepositoryInMemory implements AddToolRepository {
 
     return {
       id: params.id,
-      name: params.props.name,
+      title: params.props.title,
       link: params.props.link,
       description: params.props.description,
       tags: params.props.tags,

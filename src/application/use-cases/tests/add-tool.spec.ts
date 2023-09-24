@@ -6,7 +6,7 @@ import { AddToolRepositoryInMemory } from "./mocks/add-tool-repository-in-memory
 
 const mockTool = (mock?: ToolProps) =>
   Tool.create({
-    name: faker.commerce.productName(),
+    title: faker.commerce.productName(),
     description: faker.commerce.productDescription(),
     link: faker.internet.url(),
     tags: [faker.commerce.productMaterial(), faker.commerce.productMaterial()],
@@ -55,7 +55,7 @@ describe("Add Tool", () => {
     expect(
       async () =>
         await sut.execute({
-          title: tool.props.name,
+          title: tool.props.title,
           link: tool.props.link,
           description: tool.props.description,
           tags: tool.props.tags,
