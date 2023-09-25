@@ -1,2 +1,3 @@
 export * from "./add-tool-repository";
 export * from "./delete-tool-repository";
+export * from "./get-all-tools-repository";

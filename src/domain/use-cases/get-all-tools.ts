@@ -4,7 +4,7 @@ import { ToolProps } from "@domain/entities";
 export namespace GetAllTools {
   export type Params = void;
 
-  export type Result = ToolProps[];
+  export type Result = ToolProps & { id: string }[];
 }
 
 export interface GetAllTools extends UseCase<GetAllTools.Params, GetAllTools.Result> {
