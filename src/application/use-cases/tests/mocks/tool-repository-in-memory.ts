@@ -1,7 +1,14 @@
-import { AddToolRepository, DeleteToolRepository, GetAllToolsRepository } from "@application/repositories";
+import {
+  AddToolRepository,
+  DeleteToolRepository,
+  GetAllToolsRepository,
+  GetToolRepository,
+} from "@application/repositories";
 import { Tool } from "@domain/entities";
 
-export class ToolRepositoryInMemory implements AddToolRepository, DeleteToolRepository, GetAllToolsRepository {
+export class ToolRepositoryInMemory
+  implements AddToolRepository, DeleteToolRepository, GetAllToolsRepository, GetToolRepository
+{
   tools: Array<Tool> = [];
   tags: Map<string, string> = new Map();
 
@@ -74,5 +81,9 @@ export class ToolRepositoryInMemory implements AddToolRepository, DeleteToolRepo
       description: tool.props.description,
       tags: tool.props.tags,
     }));
+  }
+
+  async findById(id: string): Promise<GetToolRepository.Result> {
+    return this.tools.find((tool) => tool.id === id);
   }
 }
