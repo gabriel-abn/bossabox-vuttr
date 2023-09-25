@@ -6,7 +6,7 @@ export namespace GetTool {
     id: string;
   };
 
-  export type Result = ToolProps;
+  export type Result = ToolProps & { id: string };
 }
 
 export interface GetTool extends UseCase<GetTool.Params, GetTool.Result> {
