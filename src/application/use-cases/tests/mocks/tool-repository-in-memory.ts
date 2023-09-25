@@ -1,7 +1,7 @@
-import { AddToolRepository } from "@application/repositories";
+import { AddToolRepository, CheckToolRepository, DeleteToolRepository } from "@application/repositories";
 import { Tool } from "@domain/entities";
 
-export class AddToolRepositoryInMemory implements AddToolRepository {
+export class ToolRepositoryInMemory implements AddToolRepository, CheckToolRepository, DeleteToolRepository {
   tools: Array<Tool> = [];
   tags: Map<string, string> = new Map();
 
@@ -39,5 +39,30 @@ export class AddToolRepositoryInMemory implements AddToolRepository {
       description: params.props.description,
       tags: params.props.tags,
     };
+  }
+
+  async delete(id: string): Promise<boolean> {
+    const tool = this.tools.find((tool) => tool.id === id);
+
+    if (!tool) {
+      throw new Error("TOOL_NOT_FOUND");
+    }
+
+    const index = this.tools.indexOf(tool);
+    this.tools.splice(index, 1);
+
+    tool.props.tags.map((tag) => {
+      const tools = this.tags.get(tag);
+      if (tools) {
+        const newTools = tools.split(";").filter((toolId) => toolId !== id);
+        if (newTools.length > 0) {
+          this.tags.set(tag, newTools.join(";"));
+        } else {
+          this.tags.delete(tag);
+        }
+      }
+    });
+
+    return true;
   }
 }

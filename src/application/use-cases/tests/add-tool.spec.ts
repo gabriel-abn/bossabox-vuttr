@@ -1,7 +1,7 @@
 import { Tool, ToolProps } from "@domain/entities";
 import { faker } from "@faker-js/faker";
 import { AddToolUseCase } from "../add-tool-use-case";
-import { AddToolRepositoryInMemory } from "./mocks/add-tool-repository-in-memory";
+import { ToolRepositoryInMemory } from "./mocks/tool-repository-in-memory";
 
 const mockTool = (mock?: ToolProps) =>
   Tool.create({
@@ -13,20 +13,13 @@ const mockTool = (mock?: ToolProps) =>
   });
 
 const makeSut = () => {
-  const repository = new AddToolRepositoryInMemory();
+  const repository = new ToolRepositoryInMemory();
   const sut = new AddToolUseCase(repository);
 
   return { sut, repository };
 };
 
 describe("Use case: Add Tool", () => {
-  afterEach(() => {
-    const { repository } = makeSut();
-
-    repository.tools = [];
-    repository.tags.clear();
-  });
-
   it("should return id and tool title", async () => {
     const { sut } = makeSut();
 
