@@ -7,7 +7,7 @@ export namespace SearchTools {
     title: string;
   }>;
 
-  export type Result = ToolProps[];
+  export type Result = (ToolProps & { id: string })[];
 }
 
 export interface SearchTools
