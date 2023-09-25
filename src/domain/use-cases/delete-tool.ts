@@ -8,6 +8,7 @@ export namespace DeleteTool {
   export type Result = boolean;
 }
 
-export interface DeleteTool extends UseCase<DeleteTool.Params, DeleteTool.Result> {
+export interface DeleteTool
+  extends UseCase<DeleteTool.Params, DeleteTool.Result> {
   execute(params: DeleteTool.Params): Promise<DeleteTool.Result>;
 }

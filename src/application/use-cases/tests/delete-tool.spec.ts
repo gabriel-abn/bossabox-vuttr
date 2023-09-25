@@ -54,7 +54,9 @@ describe("Use case: Delete tool", () => {
     tools.forEach((tool) => repository.add(tool));
 
     sut.execute({ id: tools[0].id }).then(() => {
-      expect(repository.tags.get("tag1").split(";").includes(tools[0].id)).toBeFalsy();
+      expect(
+        repository.tags.get("tag1").split(";").includes(tools[0].id),
+      ).toBeFalsy();
       expect(repository.tags.get("tag1").split(";").length).toBe(3);
     });
   });

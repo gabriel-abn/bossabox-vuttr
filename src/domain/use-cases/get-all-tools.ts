@@ -7,6 +7,7 @@ export namespace GetAllTools {
   export type Result = (ToolProps & { id: string })[];
 }
 
-export interface GetAllTools extends UseCase<GetAllTools.Params, GetAllTools.Result> {
+export interface GetAllTools
+  extends UseCase<GetAllTools.Params, GetAllTools.Result> {
   execute(params: GetAllTools.Params): Promise<GetAllTools.Result>;
 }

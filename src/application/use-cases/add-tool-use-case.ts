@@ -6,7 +6,10 @@ export class AddToolUseCase implements AddTool {
   constructor(private readonly addToolRepository: AddToolRepository) {}
 
   async execute(params: AddTool.Params): Promise<AddTool.Result> {
-    const exists = await this.addToolRepository.checkByTitleAndLink(params.title, params.link);
+    const exists = await this.addToolRepository.checkByTitleAndLink(
+      params.title,
+      params.link,
+    );
 
     if (exists) {
       throw new Error("TOOL_ALREADY_EXISTS");

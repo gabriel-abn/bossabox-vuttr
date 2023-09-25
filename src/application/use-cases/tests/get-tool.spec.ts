@@ -14,7 +14,9 @@ describe("Use case: Get tool", () => {
     const { sut, repository } = makeSut();
     const tool = mockTool();
 
-    const result = await repository.add(tool).then(() => sut.execute({ id: tool.id }).then((tool) => tool));
+    const result = await repository
+      .add(tool)
+      .then(() => sut.execute({ id: tool.id }).then((tool) => tool));
 
     expect(result).toEqual({ ...tool.props, id: tool.id });
   });
@@ -22,6 +24,8 @@ describe("Use case: Get tool", () => {
   it("should throw if tool does not exists", () => {
     const { sut } = makeSut();
 
-    expect(async () => await sut.execute({ id: "invalid-id" })).rejects.toThrow();
+    expect(
+      async () => await sut.execute({ id: "invalid-id" }),
+    ).rejects.toThrow();
   });
 });

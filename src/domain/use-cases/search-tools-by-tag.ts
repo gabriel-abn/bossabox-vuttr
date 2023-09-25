@@ -10,6 +10,7 @@ export namespace SearchToolByTag {
   export type Result = ToolProps[];
 }
 
-export interface SearchToolByTag extends UseCase<SearchToolByTag.Params, SearchToolByTag.Result> {
+export interface SearchToolByTag
+  extends UseCase<SearchToolByTag.Params, SearchToolByTag.Result> {
   execute(params: SearchToolByTag.Params): Promise<SearchToolByTag.Result>;
 }

@@ -23,7 +23,12 @@ export class Tool {
     this.props.tags = this.props.tags.map((tag) => tag.toLowerCase());
   }
 
-  static restore(props: ToolProps, id: string, createdAt: Date, updatedAt: Date) {
+  static restore(
+    props: ToolProps,
+    id: string,
+    createdAt: Date,
+    updatedAt: Date,
+  ) {
     const tool = new Tool(props, id, createdAt, updatedAt);
     return tool;
   }

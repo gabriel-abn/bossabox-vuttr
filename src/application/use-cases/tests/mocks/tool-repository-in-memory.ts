@@ -7,7 +7,11 @@ import {
 import { Tool } from "@domain/entities";
 
 export class ToolRepositoryInMemory
-  implements AddToolRepository, DeleteToolRepository, GetAllToolsRepository, GetToolRepository
+  implements
+    AddToolRepository,
+    DeleteToolRepository,
+    GetAllToolsRepository,
+    GetToolRepository
 {
   tools: Array<Tool> = [];
   tags: Map<string, string> = new Map();
@@ -15,7 +19,8 @@ export class ToolRepositoryInMemory
   async checkByTitleAndLink(title: string, link: string): Promise<boolean> {
     const tool = this.tools.find(
       (tool) =>
-        tool.props.title.toLowerCase() === title.toLowerCase() && tool.props.link.toLowerCase() === link.toLowerCase(),
+        tool.props.title.toLowerCase() === title.toLowerCase() &&
+        tool.props.link.toLowerCase() === link.toLowerCase(),
     );
 
     if (tool) {
@@ -25,7 +30,9 @@ export class ToolRepositoryInMemory
     return false;
   }
 
-  async add(params: AddToolRepository.Params): Promise<AddToolRepository.Result> {
+  async add(
+    params: AddToolRepository.Params,
+  ): Promise<AddToolRepository.Result> {
     this.tools.push(params);
 
     params.props.tags.map((tag) => {
