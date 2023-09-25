@@ -5,6 +5,6 @@
     "DeleteTool",
     "GetAllTools",
     "GetTool",
-    "SearchToolsByTag"
+    "SearchTool"
   ]
 }
