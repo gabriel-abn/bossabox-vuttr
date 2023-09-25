@@ -1,7 +1,7 @@
-import { AddToolRepository, CheckToolRepository, DeleteToolRepository } from "@application/repositories";
+import { AddToolRepository, DeleteToolRepository } from "@application/repositories";
 import { Tool } from "@domain/entities";
 
-export class ToolRepositoryInMemory implements AddToolRepository, CheckToolRepository, DeleteToolRepository {
+export class ToolRepositoryInMemory implements AddToolRepository, DeleteToolRepository {
   tools: Array<Tool> = [];
   tags: Map<string, string> = new Map();
 
@@ -45,7 +45,7 @@ export class ToolRepositoryInMemory implements AddToolRepository, CheckToolRepos
     const tool = this.tools.find((tool) => tool.id === id);
 
     if (!tool) {
-      throw new Error("TOOL_NOT_FOUND");
+      return false;
     }
 
     const index = this.tools.indexOf(tool);
