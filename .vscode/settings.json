@@ -3,6 +3,7 @@
     "Tool",
     "AddTool",
     "DeleteTool",
-    "GetAllTools"
+    "GetAllTools",
+    "GetTool"
   ]
 }
