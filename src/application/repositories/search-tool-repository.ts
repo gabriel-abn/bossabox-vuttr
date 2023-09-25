@@ -2,5 +2,6 @@ import { Tool } from "@domain/entities";
 
 export interface SearchToolsRepository {
   checkTag(tag: string): Promise<boolean>;
-  getTools(tag: string): Promise<Tool[]>;
+  getToolsByTag(tag: string): Promise<Tool[]>;
+  getToolsByTitle(title: string): Promise<Tool[]>;
 }

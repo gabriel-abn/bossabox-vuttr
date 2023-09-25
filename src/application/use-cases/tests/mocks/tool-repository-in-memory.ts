@@ -3,6 +3,7 @@ import {
   DeleteToolRepository,
   GetAllToolsRepository,
   GetToolRepository,
+  SearchToolsRepository,
 } from "@application/repositories";
 import { Tool } from "@domain/entities";
 
@@ -11,7 +12,8 @@ export class ToolRepositoryInMemory
     AddToolRepository,
     DeleteToolRepository,
     GetAllToolsRepository,
-    GetToolRepository
+    GetToolRepository,
+    SearchToolsRepository
 {
   tools: Array<Tool> = [];
   tags: Map<string, string> = new Map();
@@ -92,5 +94,26 @@ export class ToolRepositoryInMemory
 
   async findById(id: string): Promise<GetToolRepository.Result> {
     return this.tools.find((tool) => tool.id === id);
+  }
+
+  async checkTag(tag: string): Promise<boolean> {
+    return this.tags.has(tag);
+  }
+
+  async getToolsByTag(tag: string): Promise<Tool[]> {
+    const tools = this.tags.get(tag);
+
+    if (!tools) {
+      return [];
+    }
+
+    const toolsIds = tools.split(";");
+    const toolsList = this.tools.filter((tool) => toolsIds.includes(tool.id));
+
+    return toolsList;
+  }
+
+  async getToolsByTitle(title: string): Promise<Tool[]> {
+    return this.tools.filter((tool) => tool.props.title.includes(title));
   }
 }
