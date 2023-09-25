@@ -2,6 +2,7 @@
   "conventionalCommits.scopes": [
     "Tool",
     "AddTool",
-    "DeleteTool"
+    "DeleteTool",
+    "GetAllTools"
   ]
 }

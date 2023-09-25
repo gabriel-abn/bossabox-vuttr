@@ -3,6 +3,6 @@ node_modules
 *-lock.yaml
 *.lock
 
-.vscode
+.vscode/launch.json
 
 coverage
