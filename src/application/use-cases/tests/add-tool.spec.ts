@@ -1,16 +1,6 @@
-import { Tool, ToolProps } from "@domain/entities";
-import { faker } from "@faker-js/faker";
 import { AddToolUseCase } from "../add-tool-use-case";
+import { mockTool } from "./mocks/mock-tool";
 import { ToolRepositoryInMemory } from "./mocks/tool-repository-in-memory";
-
-const mockTool = (mock?: ToolProps) =>
-  Tool.create({
-    title: faker.commerce.productName(),
-    description: faker.commerce.productDescription(),
-    link: faker.internet.url(),
-    tags: [faker.commerce.productMaterial(), faker.commerce.productMaterial()],
-    ...mock,
-  });
 
 const makeSut = () => {
   const repository = new ToolRepositoryInMemory();
