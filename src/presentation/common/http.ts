@@ -4,20 +4,20 @@ export type HttpResponse = {
   success: boolean;
 };
 
-export const ok = (body: any): HttpResponse => ({
+export const ok = (body: any, status: number = 200): HttpResponse => ({
   body,
-  status: 200,
+  status,
   success: true,
 });
 
-export const badRequest = (body: any): HttpResponse => ({
+export const badRequest = (body: any, status: number = 400): HttpResponse => ({
   body,
-  status: 400,
+  status,
   success: false,
 });
 
-export const serverError = (body: any): HttpResponse => ({
+export const serverError = (body: any, status: number = 500): HttpResponse => ({
   body,
-  status: 500,
+  status,
   success: false,
 });
