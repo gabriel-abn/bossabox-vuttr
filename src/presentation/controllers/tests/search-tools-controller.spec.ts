@@ -1,5 +1,5 @@
 import { Mock, vi } from "vitest";
-import { SearchToolsController } from "../search-tools-controller";
+import SearchToolsController from "../search-tools-controller";
 
 describe("SearchToolsController", () => {
   let controller: SearchToolsController;
@@ -30,9 +30,7 @@ describe("SearchToolsController", () => {
     const response = await controller.handle({ title: "Visual Studio Code" });
 
     expect(response.status).toBe(200);
-    expect(response.body).toBeInstanceOf(Array);
-    expect(response.body).toHaveLength(1);
-    expect(response.body[0].title).toBe("Visual Studio Code");
+    expect(response.body.tools[0].title).toBe("Visual Studio Code");
   });
 
   it("should return 400 if tool doesnt exists", async () => {
