@@ -3,3 +3,4 @@ export * from "./delete-tool";
 export * from "./get-all-tools";
 export * from "./get-tool";
 export * from "./search-tools";
+export * from "./sign-up";
