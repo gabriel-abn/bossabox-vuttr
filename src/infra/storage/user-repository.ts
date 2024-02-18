@@ -17,15 +17,11 @@ class UserRepository implements IUserRepository {
   }
 
   async get(
-    filter: Partial<{ email: string; id: string }>,
-  ): Promise<{ email: string; password: string }> {
+    email?: string,
+  ): Promise<{ id: string; email: string; password: string }> {
     const user = this.users.find((user) => {
-      if (filter.email) {
-        return user.email === filter.email;
-      }
-
-      if (filter.id) {
-        return user.id === filter.id;
+      if (email) {
+        return user.email === email;
       }
 
       return false;
