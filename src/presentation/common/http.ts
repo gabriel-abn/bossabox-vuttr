@@ -1,3 +1,8 @@
+export type HttpRequest<T = any> = {
+  data?: T;
+  query?: any;
+};
+
 export type HttpResponse = {
   body: any;
   status: number;
