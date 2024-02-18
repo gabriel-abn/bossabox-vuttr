@@ -23,8 +23,8 @@ export class SignUpController extends Controller<SignUpRequest> {
   async run(request: { email?: string; password?: string }): Promise<any> {
     const { email, password } = request;
 
-    const { accessToken } = await this.signIn.execute({ email, password });
+    const signed = await this.signIn.execute({ email, password });
 
-    return ok({ accessToken }, 201);
+    return ok({ created: signed }, 201);
   }
 }

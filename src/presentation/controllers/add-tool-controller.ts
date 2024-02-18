@@ -1,11 +1,11 @@
 import { AddTool } from "@domain/use-cases";
 import {
-  Controller,
   HttpResponse,
   badRequest,
   ok,
   serverError,
 } from "@presentation/common";
+import Controller from "@presentation/common/controller";
 
 export type AddToolRequest = {
   title: string;
@@ -14,8 +14,10 @@ export type AddToolRequest = {
   tags: string[];
 };
 
-export class AddToolController implements Controller<AddToolRequest> {
-  constructor(private readonly useCase: AddTool) {}
+export class AddToolController extends Controller<AddToolRequest> {
+  constructor(private readonly useCase: AddTool) {
+    super(null);
+  }
 
   async handle(request: AddToolRequest): Promise<HttpResponse> {
     try {

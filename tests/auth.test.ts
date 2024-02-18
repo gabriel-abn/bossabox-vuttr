@@ -53,7 +53,7 @@ describe("Auth: Sign up", () => {
       password: "Password123!",
     });
 
-    expect(res.body).toHaveProperty("accessToken");
+    expect(res.body).toHaveProperty("created", true);
     expect(res.status).toBe(201);
   });
 });

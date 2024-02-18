@@ -9,7 +9,7 @@ export class SignUpUseCase implements SignUp {
     private readonly encrypter: IEncrypter,
   ) {}
 
-  async execute(params: SignUp.Params): Promise<SignUp.Result> {
+  async execute(params: SignUp.Params): Promise<boolean> {
     const { email, password } = params;
 
     const { id } = await this.userRepo.save({
@@ -17,8 +17,10 @@ export class SignUpUseCase implements SignUp {
       password: await this.encrypter.encrypt(password),
     });
 
-    const accessToken = await this.tokenHandler.tokenize({ id, email });
+    if (!id) {
+      return false;
+    }
 
-    return { accessToken };
+    return true;
   }
 }

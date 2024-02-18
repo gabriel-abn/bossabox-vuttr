@@ -5,12 +5,8 @@ export namespace SignUp {
     email: string;
     password: string;
   };
-
-  export type Result = {
-    accessToken: string;
-  };
 }
 
-export interface SignUp extends UseCase<SignUp.Params, SignUp.Result> {
-  execute: (params: SignUp.Params) => Promise<SignUp.Result>;
+export interface SignUp extends UseCase<SignUp.Params, boolean> {
+  execute: (params: SignUp.Params) => Promise<boolean>;
 }
