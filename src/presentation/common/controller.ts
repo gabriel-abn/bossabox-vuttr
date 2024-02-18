@@ -1,3 +1,4 @@
+import { ApplicationError } from "@application/common";
 import { z } from "zod";
 import { HttpRequest, HttpResponse, badRequest, ok, serverError } from "./http";
 
@@ -32,6 +33,10 @@ abstract class Controller<T = any> {
 
       return ok(response);
     } catch (err) {
+      if (err instanceof ApplicationError) {
+        return badRequest(err.message);
+      }
+
       return serverError(err.message);
     }
   }
