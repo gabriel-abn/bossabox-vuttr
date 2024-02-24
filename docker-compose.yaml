@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bossapp
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+
+  psql:
+    image: postgres:latest
+    container_name: bossapp-psql
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bossanova-vuttr
+    volumes:
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+
+  redis:
+    image: redis:latest
+    container_name: bossapp-redis
+    ports:
+      - "6379:6379"
