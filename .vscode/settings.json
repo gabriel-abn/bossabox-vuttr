@@ -5,6 +5,8 @@
     "DeleteTool",
     "GetAllTools",
     "GetTool",
-    "SearchTool"
+    "SearchTool",
+    "SignUp",
+    "Login"
   ]
 }
