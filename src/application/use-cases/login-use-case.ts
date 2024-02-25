@@ -1,7 +1,7 @@
 import { ApplicationError } from "@application/common";
 import { IHasherComparer, ITokenHandler } from "@application/protocols";
 import { IUserRepository } from "@application/repositories";
-import { Login } from "@domain/use-cases/login";
+import { Login } from "@domain/use-cases";
 
 export class LoginUseCase implements Login {
   constructor(

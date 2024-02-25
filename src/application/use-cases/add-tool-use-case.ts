@@ -1,12 +1,18 @@
-import { AddToolRepository } from "@application/repositories";
+import {
+  CheckByTitleAndLinkRepository,
+  IToolRepository,
+} from "@application/repositories";
 import { Tool } from "@domain/entities";
 import { AddTool } from "@domain/use-cases";
 
 export class AddToolUseCase implements AddTool {
-  constructor(private readonly addToolRepository: AddToolRepository) {}
+  constructor(
+    private readonly repo: IToolRepository,
+    private readonly checkByTitleAndLink: CheckByTitleAndLinkRepository,
+  ) {}
 
   async execute(params: AddTool.Params): Promise<AddTool.Result> {
-    const exists = await this.addToolRepository.checkByTitleAndLink(
+    const exists = await this.checkByTitleAndLink.check(
       params.title,
       params.link,
     );
@@ -22,10 +28,14 @@ export class AddToolUseCase implements AddTool {
       tags: params.tags,
     });
 
-    const res = await this.addToolRepository.add(tool);
+    await this.repo.save(tool);
 
     return {
-      ...res,
+      id: tool.id,
+      title: tool.props.title,
+      description: tool.props.description,
+      link: tool.props.link,
+      tags: tool.props.tags,
     };
   }
 }
