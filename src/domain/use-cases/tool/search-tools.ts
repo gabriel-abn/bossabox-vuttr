@@ -3,7 +3,7 @@ import { ToolProps } from "@domain/entities";
 
 export namespace SearchTools {
   export type Params = Partial<{
-    tag: string;
+    tags: string[];
     title: string;
   }>;
 
