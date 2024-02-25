@@ -1,7 +1,7 @@
 import { LoginUseCase } from "@application/use-cases/login-use-case";
 import jwtHandler from "@infra/authentication/jwt-handler";
 import crypter from "@infra/crypter/crypter";
-import userRepository from "@infra/storage/user-repository";
+import userRepository from "@infra/persistence/repositories/user-repository";
 import { LoginController } from "@presentation/controllers/login-controller";
 
 export class LoginFactory {

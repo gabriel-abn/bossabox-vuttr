@@ -1,7 +1,7 @@
 import { SignUpUseCase } from "@application/use-cases";
 import jwtHandler from "@infra/authentication/jwt-handler";
 import crypter from "@infra/crypter/crypter";
-import userRepository from "@infra/storage/user-repository";
+import userRepository from "@infra/persistence/repositories/user-repository";
 import { SignUpController } from "@presentation/controllers/sign-up-controller";
 
 export class SignUpFactory {
