@@ -1,5 +1,5 @@
 import { SignUp } from "@domain/use-cases";
-import { ok } from "@presentation/common";
+import { HttpRequest, ok } from "@presentation/common";
 import Controller from "@presentation/common/controller";
 import { z } from "zod";
 
@@ -20,8 +20,8 @@ export class SignUpController extends Controller<SignUpRequest> {
     super(signUpSchema);
   }
 
-  async run(request: { email?: string; password?: string }): Promise<any> {
-    const { email, password } = request;
+  async run(request: HttpRequest<SignUpRequest>): Promise<any> {
+    const { email, password } = request.data;
 
     const signed = await this.signIn.execute({ email, password });
 

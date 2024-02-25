@@ -3,7 +3,7 @@ import { z } from "zod";
 import { HttpRequest, HttpResponse, badRequest, ok, serverError } from "./http";
 
 abstract class Controller<T = any> {
-  abstract run(request: T): Promise<any | HttpResponse>;
+  abstract run(request: HttpRequest<T>): Promise<any | HttpResponse>;
   schema: z.ZodObject<any, any, any>;
 
   constructor(schema: z.ZodObject<any, any, any>) {
@@ -25,7 +25,7 @@ abstract class Controller<T = any> {
         });
       }
 
-      const response = await this.run({ ...request.data });
+      const response = await this.run(request);
 
       if (typeof response.status != "undefined") {
         return response;

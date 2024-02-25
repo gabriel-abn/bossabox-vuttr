@@ -1,4 +1,5 @@
-import { Login } from "@domain/use-cases/login";
+import { Login } from "@domain/use-cases";
+import { HttpRequest } from "@presentation/common";
 import Controller from "@presentation/common/controller";
 import { z } from "zod";
 
@@ -14,8 +15,10 @@ export class LoginController extends Controller<LoginRequest> {
     super(loginSchema);
   }
 
-  async run(request: LoginRequest): Promise<{ accessToken: string }> {
-    const { email, password } = request;
+  async run(
+    request: HttpRequest<LoginRequest>,
+  ): Promise<{ accessToken: string }> {
+    const { email, password } = request.data;
 
     const result = await this.useCase.execute({ email, password });
 
