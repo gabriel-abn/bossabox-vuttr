@@ -4,7 +4,11 @@ export interface IToolRepository {
   save(tool: Tool): Promise<void>;
   getAll(): Promise<Tool[]>;
   delete(id: string): Promise<boolean>;
-  get(filter: { id?: string; title?: string; tag?: string }): Promise<Tool[]>;
+  get(filter: {
+    id?: string;
+    title?: string;
+    tags?: string[];
+  }): Promise<Tool[]>;
   update(id: string, tool: Tool): Promise<void>;
 }
 
