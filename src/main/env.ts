@@ -7,6 +7,10 @@ const env = z.object({
   POSTGRES_URL: z
     .string()
     .default("postgres://postgres:postgres@localhost:5432/postgres"),
+  REDIS_PORT: z
+    .string()
+    .default("6379")
+    .transform((v) => Number(v)),
 });
 
 export default env.parse(process.env, {
