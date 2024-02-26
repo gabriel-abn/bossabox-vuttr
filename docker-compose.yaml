@@ -1,15 +1,15 @@
 version: "3"
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: bossapp
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=production
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: bossapp
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - NODE_ENV=production
 
   psql:
     image: postgres:latest
@@ -17,6 +17,7 @@ services:
     ports:
       - "5432:5432"
     environment:
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: bossanova-vuttr
     volumes:
