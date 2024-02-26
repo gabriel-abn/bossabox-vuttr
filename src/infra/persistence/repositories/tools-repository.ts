@@ -5,6 +5,7 @@ import {
 import { Tool } from "@domain/entities";
 import { IListDatabase, IRelationalDatabase, RepositoryError } from "../common";
 import postgres from "../database/postgres";
+import redis from "../database/redis";
 
 class ToolsRepository
   implements IToolRepository, CheckByTitleAndLinkRepository
@@ -14,23 +15,28 @@ class ToolsRepository
 
   constructor() {
     this.relational = postgres;
+    this.list = redis;
   }
 
   async check(title: string, link: string): Promise<boolean> {
-    const rows = await this.relational.query(
-      `
-      SELECT *
-      FROM tools
-      WHERE title = $1 AND link = $2
-      `,
-      [title, link],
-    );
+    try {
+      const rows = await this.relational.query(
+        `
+        SELECT *
+        FROM public.tool
+        WHERE title = $1 AND link = $2
+        `,
+        [title, link],
+      );
 
-    if (rows.length === 0) {
-      return false;
+      if (rows.length === 0) {
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      throw new RepositoryError("ToolsRepository.check", error);
     }
-
-    return true;
   }
 
   async save(tool: Tool): Promise<void> {
@@ -50,19 +56,23 @@ class ToolsRepository
 
       await this.relational.execute(
         `
-        INSERT INTO tools (id, title, link, description, tags, created_at, updated_at)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        INSERT INTO public.tool (id, title, link, description, created_at, updated_at)
+        VALUES ($1, $2, $3, $4, $5, $6)
         `,
         [
           props.id,
           props.title,
           props.link,
           props.description,
-          props.tags,
           props.createdAt,
           props.updatedAt,
         ],
       );
+
+      const storedTags = (await this.list.getList("tags")).concat(props.tags);
+
+      await this.list.addToList("tags", ...storedTags);
+      await this.list.addToList(`tool:${props.id}`, ...props.tags);
     } catch (error) {
       throw new RepositoryError("ToolsRepository.save", error);
     }
@@ -73,7 +83,7 @@ class ToolsRepository
       const tools = await this.relational.query(
         `
         SELECT *, created_at as "createdAt", updated_at as "updatedAt"
-        FROM tools
+        FROM public.tool
         `,
       );
 
@@ -81,18 +91,22 @@ class ToolsRepository
         return [];
       }
 
-      return tools.map((tool) =>
-        Tool.restore(
-          {
-            title: tool.title,
-            link: tool.link,
-            description: tool.description,
-            tags: tool.tags,
-          },
-          tool.id,
-          tool.createdAt,
-          tool.updatedAt,
-        ),
+      return Promise.all(
+        tools.map(async (tool) => {
+          const tags = await this.list.getList(`tool:${tool.id}`);
+
+          return Tool.restore(
+            {
+              title: tool.title,
+              link: tool.link,
+              description: tool.description,
+              tags,
+            },
+            tool.id,
+            tool.createdAt,
+            tool.updatedAt,
+          );
+        }),
       );
     } catch (error) {
       throw new RepositoryError("ToolsRepository.getAll", error);
@@ -103,13 +117,19 @@ class ToolsRepository
     try {
       const result = await this.relational.execute(
         `
-        DELETE FROM tools
+        DELETE FROM public.tool
         WHERE id = $1;
         `,
         [id],
       );
 
-      return result;
+      if (result) {
+        await this.list.clearList(`tool:${id}`);
+
+        return true;
+      }
+
+      return false;
     } catch (error) {
       throw new RepositoryError("ToolsRepository.delete", error);
     }
@@ -128,7 +148,7 @@ class ToolsRepository
         const rows = await this.relational.query(
           `
           SELECT *, created_at as "createdAt", updated_at as "updatedAt"
-          FROM tools
+          FROM public.tool
           WHERE id = $1
           `,
           [id],
@@ -138,14 +158,16 @@ class ToolsRepository
           return [];
         }
 
-        rows.forEach((row) => {
+        rows.forEach(async (row) => {
+          const tags = await this.list.getList(`tool:${row.id}`);
+
           tool.push(
             Tool.restore(
               {
                 title: row.title,
                 link: row.link,
                 description: row.description,
-                tags: row.tags,
+                tags,
               },
               row.id,
               row.createdAt,
@@ -161,7 +183,7 @@ class ToolsRepository
         const rows = await this.relational.query(
           `
           SELECT *, created_at as "createdAt", updated_at as "updatedAt"
-          FROM tools
+          FROM public.tool
           WHERE title LIKE $1
           `,
           [`%${title}%`],
@@ -171,14 +193,16 @@ class ToolsRepository
           return [];
         }
 
-        rows.forEach((row) => {
+        rows.forEach(async (row) => {
+          const tags = await this.list.getList(`tool:${row.id}`);
+
           tool.push(
             Tool.restore(
               {
                 title: row.title,
                 link: row.link,
                 description: row.description,
-                tags: row.tags,
+                tags,
               },
               row.id,
               row.createdAt,
@@ -206,8 +230,8 @@ class ToolsRepository
         const rows = await this.relational.query(
           `
           SELECT *, created_at as "createdAt", updated_at as "updatedAt"
-          FROM tools
-          WHERE id @> $1
+          FROM public.tool
+          WHERE id IN ($1);
           `,
           [Array.from(ids)],
         );
@@ -216,14 +240,16 @@ class ToolsRepository
           return [];
         }
 
-        rows.forEach((row) => {
+        rows.forEach(async (row) => {
+          const tags = await this.list.getList(`tool:${row.id}`);
+
           tool.push(
             Tool.restore(
               {
                 title: row.title,
                 link: row.link,
                 description: row.description,
-                tags: row.tags,
+                tags,
               },
               row.id,
               row.createdAt,
@@ -250,19 +276,15 @@ class ToolsRepository
 
       await this.relational.execute(
         `
-        UPDATE tools
-        SET title = $1, link = $2, description = $3, tags = $4, updated_at = $5
-        WHERE id = $6
+        UPDATE public.tool
+        SET title = $1, link = $2, description = $3, updated_at = $4
+        WHERE id = $5
         `,
-        [
-          props.title,
-          props.link,
-          props.description,
-          props.tags,
-          props.updatedAt,
-          props.id,
-        ],
+        [props.title, props.link, props.description, props.updatedAt, props.id],
       );
+
+      await this.list.clearList(`tool:${id}`);
+      await this.list.addToList(`tool:${id}`, ...props.tags);
     } catch (error) {
       throw new RepositoryError("ToolsRepository.update", error);
     }
